@@ -12,6 +12,18 @@
   <script src="config.js" defer></script>
   <script src="script.js" defer></script>
 </head>
+
+<!-- Anniversary Background Music -->
+<audio id="backgroundMusic" loop preload="none">
+  <source src="assets/music/background.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle" class="music-toggle"
+        type="button" aria-label="Play background music"
+        aria-pressed="false">
+  <span id="musicIcon">♫</span>
+</button>
+
 <body>
   <section id="intro" class="intro" aria-label="Invitation envelope">
     <div class="intro-content">
@@ -40,7 +52,7 @@
     <section class="section story" id="story"><p class="overline">Their beautiful journey</p><h2>Half a Century, One Love</h2><p>From the first chapter of their story to a lifetime of treasured moments, Vic and Perly have built a love that continues to inspire everyone around them. Join us in honoring fifty wonderful years together.</p><div class="photo-frame"><img id="couplePhoto" src="assets/photos/couple.jpg" alt="Vic and Perly Clemente"><div id="coupleFallback" class="photo-fallback" hidden>Vic & Perly<br><small>Place couple.jpg in assets/photos</small></div></div><p class="script">The best is yet to come</p></section>
     <section class="section details-section" id="details"><p class="overline">Save the date</p><h2>The Golden Celebration</h2><p>We would be honored to celebrate this special milestone with you.</p><div class="details-grid"><div class="detail"><p class="overline">When</p><h3 id="dateLabel"></h3><small id="timeLabel"></small></div><div class="detail"><p class="overline">Where</p><h3 id="venueLabel"></h3><small id="addressLabel"></small></div><div class="detail"><p class="overline">Attire</p><h3 id="attireLabel"></h3><small>Gold and neutral tones welcome</small></div></div><p class="overline">Counting down to forever</p><div class="countdown" id="countdown"><div><strong id="days">—</strong><span>Days</span></div><div><strong id="hours">—</strong><span>Hours</span></div><div><strong id="minutes">—</strong><span>Minutes</span></div><div><strong id="seconds">—</strong><span>Seconds</span></div></div><a id="mapLink" class="gold-button outline" hidden target="_blank" rel="noopener noreferrer">View Location ↗</a></section>
     <section class="section gallery-section" id="gallery"><p class="overline">Moments through the years</p><h2>A Lifetime of Memories</h2><p>Every photograph tells a story. Every story is a piece of their forever.</p><div class="gallery-grid" id="galleryGrid"></div></section>
-    <section class="section rsvp-section" id="rsvp"><p class="overline">We'd love to celebrate with you</p><h2>Kindly RSVP</h2><p>Please let us know if you'll be joining us for this golden occasion.</p><form id="rsvpForm" class="rsvp-form"><label>Your full name<input name="name" required maxlength="120" placeholder="Full name" autocomplete="name"></label><label>Will you attend?<select name="attendance" required><option value="">Choose an answer</option><option value="Joyfully accepts">Joyfully accepts</option><option value="Regretfully declines">Regretfully declines</option></select></label><label>Number of guests (including you)<input name="guests" type="number" min="1" max="20" value="1" required></label><label>Message (optional)<textarea name="message" maxlength="1000" placeholder="A message for Vic & Perly"></textarea></label><button id="submitRsvp" class="gold-button" type="submit">Send My RSVP</button><p class="form-note">Your RSVP is recorded securely by the event organizers.</p></form></section>
+    <section class="section rsvp-section" id="rsvp"><p class="overline">We'd love to celebrate with you</p><h2>RSVP</h2><p>Please let us know if you'll be joining us for this golden occasion.</p><form id="rsvpForm" class="rsvp-form"><label>Your full name<input name="name" required maxlength="120" placeholder="Full name" autocomplete="name"></label><label>Will you attend?<select name="attendance" required><option value="">Choose an answer</option><option value="Joyfully accepts">Joyfully accepts</option><option value="Regretfully declines">Regretfully declines</option></select></label><label>Number of guests (including you)<input name="guests" type="number" min="1" max="20" value="1" required></label><label>Message (optional)<textarea name="message" maxlength="1000" placeholder="A message for Vic & Perly"></textarea></label><button id="submitRsvp" class="gold-button" type="submit">Send My RSVP</button><p class="form-note">Your RSVP is recorded securely by the event organizers.</p></form></section>
     <footer><p class="script">Vic & Perly</p><p>FIFTY YEARS. COUNTLESS MEMORIES. ONE BEAUTIFUL LOVE.</p><small>Made with love for the Clemente family</small></footer>
   </main>
   <div id="photoModal" class="photo-modal" hidden><button id="closePhoto" aria-label="Close photo">×</button><img id="largePhoto" alt="Family memory"></div>

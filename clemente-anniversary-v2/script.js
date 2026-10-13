@@ -94,4 +94,62 @@ $('rsvpForm').addEventListener('submit', async (event) => {
   } finally {
     submit.disabled = false;
   }
+
+
+  
 });
+
+
+
+/* Anniversary Background Music */
+const backgroundMusic = document.getElementById("backgroundMusic");
+const musicToggle = document.getElementById("musicToggle");
+const musicIcon = document.getElementById("musicIcon");
+
+backgroundMusic.volume = 0.3;
+
+function updateMusicButton() {
+  const playing = !backgroundMusic.paused;
+
+  musicToggle.classList.toggle("playing", playing);
+  musicToggle.setAttribute("aria-pressed", String(playing));
+  musicToggle.setAttribute(
+    "aria-label",
+    playing ? "Pause background music" : "Play background music"
+  );
+
+  musicIcon.textContent = playing ? "♫" : "♪";
+}
+
+async function playAnniversaryMusic() {
+  try {
+    await backgroundMusic.play();
+  } catch (error) {
+    // Browser may require a direct user interaction.
+  }
+
+  updateMusicButton();
+}
+
+musicToggle.addEventListener("click", async () => {
+  if (backgroundMusic.paused) {
+    await playAnniversaryMusic();
+  } else {
+    backgroundMusic.pause();
+    updateMusicButton();
+  }
+});
+
+backgroundMusic.addEventListener("play", updateMusicButton);
+backgroundMusic.addEventListener("pause", updateMusicButton);
+
+// Start music on the guest's first interaction with the envelope.
+const envelope = document.querySelector("#openEnvelope");
+
+if (envelope) {
+  envelope.addEventListener("click", playAnniversaryMusic, {
+    once: true
+  });
+}
+
+updateMusicButton();
