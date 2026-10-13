@@ -31,17 +31,135 @@ updateCountdown();
 setInterval(updateCountdown, 1000);
 
 $('couplePhoto').addEventListener('error', () => { $('couplePhoto').hidden = true; $('coupleFallback').hidden = false; });
-for (let i = 1; i <= 6; i++) {
-  const tile = document.createElement('div');
-  tile.className = 'gallery-item';
+
+/* Responsive 3D Photo Carousel */
+const memoryTrack = document.getElementById('galleryGrid');
+const memoryDots = document.getElementById('memoryDots');
+const memoryStage = document.getElementById('memoryStage');
+
+let activeMemory = 0;
+const memoryCount = 6;
+
+for (let i = 0; i < memoryCount; i++) {
+  const slide = document.createElement('button');
+  slide.type = 'button';
+  slide.className = 'memory-slide';
+  slide.setAttribute('aria-label', `View memory ${i + 1}`);
+
   const img = document.createElement('img');
-  img.src = `assets/photos/memory-${i}.jpg`;
-  img.alt = `Victor and Perlita memory ${i}`;
-  img.addEventListener('error', () => { img.remove(); tile.textContent = `Memory ${String(i).padStart(2, '0')}`; });
-  img.addEventListener('click', () => { $('largePhoto').src = img.src; $('photoModal').hidden = false; });
-  tile.append(img);
-  $('galleryGrid').append(tile);
+  img.src = `assets/photos/memory-${i + 1}.jpg`;
+  img.alt = `Victor and Perlita memory ${i + 1}`;
+  img.draggable = false;
+
+  img.addEventListener('error', () => {
+    img.hidden = true;
+    slide.classList.add('memory-missing');
+  });
+
+  const caption = document.createElement('span');
+  caption.className = 'memory-number';
+  caption.textContent =
+    `MEMORY ${String(i + 1).padStart(2, '0')}`;
+
+  slide.append(img, caption);
+
+  slide.addEventListener('click', () => {
+    if (activeMemory !== i) {
+      activeMemory = i;
+      renderMemories();
+    } else {
+      document.getElementById('largePhoto').src = img.src;
+      document.getElementById('photoModal').hidden = false;
+    }
+  });
+
+  memoryTrack.append(slide);
+
+  const dot = document.createElement('button');
+  dot.type = 'button';
+  dot.className = 'memory-dot';
+  dot.setAttribute('aria-label', `Go to photo ${i + 1}`);
+
+  dot.addEventListener('click', () => {
+    activeMemory = i;
+    renderMemories();
+  });
+
+  memoryDots.append(dot);
 }
+
+function renderMemories() {
+  [...memoryTrack.children].forEach((slide, i) => {
+    let distance = i - activeMemory;
+
+    if (distance > memoryCount / 2) distance -= memoryCount;
+    if (distance < -memoryCount / 2) distance += memoryCount;
+
+    slide.dataset.offset =
+      Math.abs(distance) > 2 ? 'hidden' : String(distance);
+
+    slide.setAttribute(
+      'aria-current',
+      i === activeMemory ? 'true' : 'false'
+    );
+
+    slide.tabIndex = Math.abs(distance) <= 1 ? 0 : -1;
+  });
+
+  [...memoryDots.children].forEach((dot, i) => {
+    dot.classList.toggle('active', i === activeMemory);
+    dot.setAttribute('aria-pressed', String(i === activeMemory));
+  });
+
+  document.getElementById('memoryCounter').textContent =
+    `${String(activeMemory + 1).padStart(2, '0')} / 06`;
+}
+
+function changeMemory(step) {
+  activeMemory =
+    (activeMemory + step + memoryCount) % memoryCount;
+  renderMemories();
+}
+
+document.getElementById('memoryPrev')
+  .addEventListener('click', () => changeMemory(-1));
+
+document.getElementById('memoryNext')
+  .addEventListener('click', () => changeMemory(1));
+
+document.getElementById('memoryCarousel')
+  .addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') {
+      event.preventDefault();
+      changeMemory(-1);
+    }
+    if (event.key === 'ArrowRight') {
+      event.preventDefault();
+      changeMemory(1);
+    }
+  });
+
+let memoryTouchX = null;
+
+memoryStage.addEventListener('touchstart', event => {
+  memoryTouchX = event.touches[0].clientX;
+}, { passive: true });
+
+memoryStage.addEventListener('touchend', event => {
+  if (memoryTouchX === null) return;
+
+  const delta =
+    event.changedTouches[0].clientX - memoryTouchX;
+
+  if (Math.abs(delta) > 35) {
+    changeMemory(delta < 0 ? 1 : -1);
+  }
+
+  memoryTouchX = null;
+}, { passive: true });
+
+renderMemories();
+
 $('closePhoto').addEventListener('click', () => { $('photoModal').hidden = true; });
 $('photoModal').addEventListener('click', (event) => { if (event.target === $('photoModal')) $('photoModal').hidden = true; });
 document.addEventListener('keydown', (event) => { if (event.key === 'Escape') $('photoModal').hidden = true; });
@@ -70,7 +188,7 @@ $('rsvpForm').addEventListener('submit', async (event) => {
   const attendance = String(data.get('attendance'));
   const guests = attendance === 'Regretfully declines' ? 0 : Number(data.get('guests'));
   if (!['Joyfully accepts', 'Regretfully declines'].includes(attendance) ||
-      (attendance === 'Joyfully accepts' && (!Number.isInteger(guests) || guests < 1 || guests > 20))) {
+    (attendance === 'Joyfully accepts' && (!Number.isInteger(guests) || guests < 1 || guests > 20))) {
     showStatus('error');
     return;
   }
@@ -96,7 +214,7 @@ $('rsvpForm').addEventListener('submit', async (event) => {
   }
 
 
-  
+
 });
 
 
