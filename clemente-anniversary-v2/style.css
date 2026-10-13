@@ -47,3 +47,16 @@
   }
 }
 
+
+.venue-map-button {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 11px 18px;
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-decoration: none;
+}
+
+.venue-map-button[hidden] {
+  display: none;
+}
